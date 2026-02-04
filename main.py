@@ -112,7 +112,10 @@ class LinuxDoBrowser:
             "X-Requested-With": "XMLHttpRequest",
             "Referer": LOGIN_URL,
         }
-        resp_csrf = self.session.get(CSRF_URL, headers=headers, impersonate="chrome136")
+        resp_csrf = self.session.get(CSRF_URL, headers=headers, impersonate="firefox135")
+        if resp_csrf.status_code != 200:
+            logger.error(f"获取 CSRF token 失败: {resp_csrf.status_code}")
+            return False        
         csrf_data = resp_csrf.json()
         csrf_token = csrf_data.get("csrf")
         logger.info(f"CSRF Token obtained: {csrf_token[:10]}...")
